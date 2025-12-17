@@ -1,11 +1,16 @@
 {
     "name": "n8n-nodes-wechat-md",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "n8n node to convert Markdown to WeChat Official Account compatible HTML with syntax highlighting and themes.",
     "license": "MIT",
     "homepage": "",
-    "keywords": ["n8n-community-node-package"],
-    "author": { "name": "MrDon94", "email": "94nbdong@gmail.com" },
+    "keywords": [
+        "n8n-community-node-package"
+    ],
+    "author": {
+        "name": "MrDon94",
+        "email": "94nbdong@gmail.com"
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/MrDon94/n8n-nodes-wechat-md.git"
@@ -19,12 +24,16 @@
         "release": "n8n-node release",
         "prepublishOnly": "n8n-node prerelease"
     },
-    "files": ["dist"],
+    "files": [
+        "dist"
+    ],
     "n8n": {
         "n8nNodesApiVersion": 1,
         "strict": false,
         "credentials": [],
-        "nodes": ["dist/nodes/WeChatMarkdown/WeChatMarkdown.node.js"]
+        "nodes": [
+            "dist/nodes/WeChatMarkdown/WeChatMarkdown.node.js"
+        ]
     },
     "devDependencies": {
         "@n8n/node-cli": "*",
@@ -34,7 +43,9 @@
         "release-it": "^19.0.4",
         "typescript": "5.9.2"
     },
-    "peerDependencies": { "n8n-workflow": "*" },
+    "peerDependencies": {
+        "n8n-workflow": "*"
+    },
     "dependencies": {
         "highlight.js": "^11.11.1",
         "juice": "^10.0.1",
