@@ -1,0 +1,55 @@
+.katex {
+    font: normal 1.21em KaTeX_Main, Times New Roman, serif;
+    line-height: 1.2;
+    white-space: nowrap;
+    text-indent: 0;
+}
+
+.katex .katex-mathml {
+    position: absolute;
+    clip: rect(1px, 1px, 1px, 1px);
+    padding: 0;
+    border: 0;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+}
+
+.katex .katex-html {
+    display: block;
+}
+
+.katex .base {
+    position: relative;
+    white-space: nowrap;
+    width: min-content;
+    display: inline-block;
+}
+
+.katex .strut {
+    display: inline-block;
+    height: 1em;
+    vertical-align: -0.5em;
+}
+
+/* Minimal subset of KaTeX CSS for basic rendering. 
+   Full KaTeX CSS is too large to inline efficiently and might break WeChat limits. 
+   We rely on basic font styling here. 
+   For production, we might need to fetch the full CSS or a minified version.
+*/
+.katex-display {
+    display: block;
+    margin: 1em 0;
+    text-align: center;
+}
+
+.katex-display>.katex {
+    display: block;
+    text-align: center;
+    white-space: normal;
+}
+
+.katex-display>.katex>.katex-html {
+    display: block;
+    text-align: center;
+}

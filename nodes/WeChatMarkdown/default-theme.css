@@ -1,0 +1,157 @@
+/* Default Theme (Classic Green) - Extracted from md.doocs.org */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 1.5em;
+  margin-bottom: 1em;
+  font-weight: bold;
+  color: #0a0a0a;
+  /* rgb(10, 10, 10) */
+}
+
+h1 {
+  font-size: 19.2px;
+  text-align: center;
+  border-bottom: 2px solid #009874;
+  /* rgb(0, 152, 116) */
+  margin: 0px 0px 19.2px;
+  padding: 0px 19.2px;
+}
+
+h2 {
+  font-size: 19.2px;
+  text-align: center;
+  border-left: none;
+  background-color: #009874;
+  /* rgb(0, 152, 116) */
+  color: #ffffff;
+  margin: 76.8px 10px 38.4px 10px;
+  padding: 5px 10px;
+  /* Adjusted padding for better look with background */
+  border-radius: 4px;
+  /* Added rounded corners for better look */
+}
+
+h3 {
+  font-size: 17.6px;
+  text-align: left;
+  border-left: 3px solid #009874;
+  /* rgb(0, 152, 116) */
+  margin: 35.2px 8px 13.2px 0px;
+  padding-left: 8px;
+  background-color: transparent;
+}
+
+p {
+  font-size: 16px;
+  color: #0a0a0a;
+  /* rgb(10, 10, 10) */
+  margin: 24px 8px;
+  line-height: 1.6;
+  text-align: left;
+}
+
+blockquote {
+  font-size: 16px;
+  color: #0a0a0a;
+  /* rgb(10, 10, 10) */
+  border-left: 4px solid #009874;
+  /* rgb(0, 152, 116) */
+  background-color: #f7f7f7;
+  /* rgb(247, 247, 247) */
+  margin: 0px 0px 16px;
+  padding: 16px;
+  text-align: left;
+}
+
+ul,
+ol {
+  font-size: 16px;
+  color: #0a0a0a;
+  /* rgb(10, 10, 10) */
+  margin: 0px;
+  padding-left: 24px;
+  /* Adjusted padding */
+  text-align: left;
+}
+
+li {
+  font-size: 16px;
+  color: #0a0a0a;
+  /* rgb(10, 10, 10) */
+  margin: 3.2px 8px;
+  line-height: 1.6;
+}
+
+a {
+  font-size: 16px;
+  color: #576b95;
+  /* rgb(87, 107, 149) */
+  text-decoration: none;
+  border-bottom: 1px solid #576b95;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1em auto;
+  border-radius: 4px;
+}
+
+/* Inline code */
+p code,
+li code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 14.4px;
+  color: #dd1144;
+  /* rgb(221, 17, 68) */
+  background-color: rgba(27, 31, 35, 0.05);
+  padding: 3px 5px;
+  border-radius: 2px;
+}
+
+/* Code blocks */
+pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 14.4px;
+  background-color: #0d1117;
+  /* rgb(13, 17, 23) */
+  color: #c9d1d9;
+  /* rgb(201, 209, 217) */
+  margin: 10px 8px;
+  padding: 1em;
+  border-radius: 4px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  line-height: 1.5;
+}
+
+pre code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 12.96px;
+  color: #c9d1d9;
+  /* rgb(201, 209, 217) */
+  background-color: transparent;
+  padding: 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+}
+
+th,
+td {
+  border: 1px solid #dfe2e5;
+  padding: 0.6em 1em;
+}
+
+th {
+  background-color: #f8f8f8;
+  font-weight: bold;
+}
