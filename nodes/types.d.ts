@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 declare module 'markdown-it' {
     export default class MarkdownIt {
         constructor(options?: any);
@@ -38,6 +39,30 @@ declare module 'markdown-it/lib/token' {
     }
 }
 
+declare module 'markdown-it/lib/token.mjs' {
+    export default class Token {
+        type: string;
+        tag: string;
+        attrs: [string, string][];
+        map: [number, number] | null;
+        nesting: number;
+        level: number;
+        children: Token[] | null;
+        content: string;
+        markup: string;
+        info: string;
+        meta: any;
+        block: boolean;
+        hidden: boolean;
+
+        attrIndex(name: string): number;
+        attrPush(attrData: [string, string]): void;
+        attrSet(name: string, value: string): void;
+        attrGet(name: string): string | null;
+        attrJoin(name: string, value: string): void;
+    }
+}
+
 declare module 'highlight.js' {
     export function getLanguage(name: string): any;
     export function highlight(code: string, options: any): { value: string };
@@ -48,3 +73,4 @@ declare module 'juice' {
 }
 
 declare module 'markdown-it-katex';
+/* eslint-enable @typescript-eslint/no-explicit-any */

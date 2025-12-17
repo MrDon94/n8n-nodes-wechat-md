@@ -1,11 +1,12 @@
 import MarkdownIt from 'markdown-it';
-import Token from 'markdown-it/lib/token';
+import Token from 'markdown-it/lib/token.mjs';
 
 export function addFootnotes(md: MarkdownIt) {
     const defaultRender = md.renderer.rules.link_open || function (tokens, idx, options, env, self) {
         return self.renderToken(tokens, idx, options);
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     md.renderer.rules.link_open = function (tokens: Token[], idx: number, options: any, env: any, self: any) {
         const token = tokens[idx];
         const href = token.attrGet('href');
@@ -34,6 +35,7 @@ export function addFootnotes(md: MarkdownIt) {
         return self.renderToken(tokens, idx, options);
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     md.renderer.rules.link_close = function (tokens: Token[], idx: number, options: any, env: any, self: any) {
 
         // Better way: find the matching open token

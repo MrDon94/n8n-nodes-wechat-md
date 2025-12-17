@@ -44,12 +44,14 @@ const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
 const style_generator_1 = require("./style-generator");
 const markdown_utils_1 = require("./markdown-utils");
+const markdown_it_katex_1 = __importDefault(require("markdown-it-katex"));
 class WeChatMarkdown {
     constructor() {
         this.description = {
             displayName: 'WeChat Markdown',
             name: 'weChatMarkdown',
-            icon: 'fa:weixin',
+            icon: 'file:wechat.svg',
+            usableAsTool: true,
             group: ['transform'],
             version: 1,
             description: 'Convert Markdown to WeChat Official Account compatible HTML',
@@ -139,8 +141,7 @@ class WeChatMarkdown {
                     themes[key] = fs.readFileSync(themePath, 'utf8');
                 }
             }
-            catch (error) {
-                console.error(`Failed to load theme ${key}:`, error);
+            catch {
             }
         }
         const katexThemePath = path.join(__dirname, 'katex.css');
@@ -150,8 +151,7 @@ class WeChatMarkdown {
                 katexCss = fs.readFileSync(katexThemePath, 'utf8');
             }
         }
-        catch (error) {
-            console.error('Failed to load katex theme:', error);
+        catch {
         }
         for (let i = 0; i < items.length; i++) {
             try {
@@ -161,14 +161,13 @@ class WeChatMarkdown {
                 try {
                     configJsonStr = this.getNodeParameter('configJson', i);
                 }
-                catch (e) {
+                catch {
                 }
                 let config = {};
                 try {
                     config = JSON.parse(configJsonStr);
                 }
-                catch (e) {
-                    console.warn('Invalid JSON config', e);
+                catch {
                 }
                 let css = '';
                 if (Object.keys(config).length > 0) {
@@ -187,8 +186,7 @@ class WeChatMarkdown {
                             }
                         }
                     }
-                    catch (e) {
-                        console.warn('Failed to load highlight.js theme', e);
+                    catch {
                     }
                 }
                 else {
@@ -211,7 +209,7 @@ class WeChatMarkdown {
                             try {
                                 highlighted = highlight_js_1.default.highlight(str, { language: lang, ignoreIllegals: true }).value;
                             }
-                            catch (__) {
+                            catch {
                                 highlighted = md.utils.escapeHtml(str);
                             }
                         }
@@ -232,7 +230,7 @@ class WeChatMarkdown {
                         return '<pre class="hljs"><code>' + highlighted + '</code></pre>';
                     },
                 });
-                md.use(require('markdown-it-katex'));
+                md.use(markdown_it_katex_1.default);
                 (0, markdown_utils_1.addFootnotes)(md);
                 let rawHtml = md.render(markdownContent, env);
                 if (env.footnotes && config.footnotes) {

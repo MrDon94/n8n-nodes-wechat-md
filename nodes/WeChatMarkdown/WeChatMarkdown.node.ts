@@ -12,12 +12,14 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { StyleGenerator, IWeChatMarkdownConfig } from './style-generator';
 import { addFootnotes, renderFootnotes } from './markdown-utils';
+import markdownItKatex from 'markdown-it-katex';
 
 export class WeChatMarkdown implements INodeType {
     description: INodeTypeDescription = {
         displayName: 'WeChat Markdown',
         name: 'weChatMarkdown',
-        icon: 'fa:weixin',
+        icon: 'file:wechat.svg',
+        usableAsTool: true,
         group: ['transform'],
         version: 1,
         description: 'Convert Markdown to WeChat Official Account compatible HTML',
@@ -109,8 +111,8 @@ export class WeChatMarkdown implements INodeType {
                 if (fs.existsSync(themePath)) {
                     themes[key] = fs.readFileSync(themePath, 'utf8');
                 }
-            } catch (error) {
-                console.error(`Failed to load theme ${key}:`, error);
+            } catch {
+                // console.error(`Failed to load theme ${key}:`, error);
             }
         }
 
@@ -121,8 +123,8 @@ export class WeChatMarkdown implements INodeType {
             if (fs.existsSync(katexThemePath)) {
                 katexCss = fs.readFileSync(katexThemePath, 'utf8');
             }
-        } catch (error) {
-            console.error('Failed to load katex theme:', error);
+        } catch {
+            // console.error('Failed to load katex theme:', error);
         }
 
         for (let i = 0; i < items.length; i++) {
@@ -132,15 +134,15 @@ export class WeChatMarkdown implements INodeType {
                 let configJsonStr = '{}';
                 try {
                     configJsonStr = this.getNodeParameter('configJson', i) as string;
-                } catch (e) {
+                } catch {
                     // Ignore if not present or invalid
                 }
 
                 let config: IWeChatMarkdownConfig = {};
                 try {
                     config = JSON.parse(configJsonStr);
-                } catch (e) {
-                    console.warn('Invalid JSON config', e);
+                } catch {
+                    // console.warn('Invalid JSON config', e);
                 }
 
                 let css = '';
@@ -163,8 +165,8 @@ export class WeChatMarkdown implements INodeType {
                                 css += '\n' + fs.readFileSync(fallbackPath, 'utf8');
                             }
                         }
-                    } catch (e) {
-                        console.warn('Failed to load highlight.js theme', e);
+                    } catch {
+                        // console.warn('Failed to load highlight.js theme', e);
                     }
                 } else {
                     // Fallback to legacy theme logic
@@ -179,6 +181,7 @@ export class WeChatMarkdown implements INodeType {
                 css += '\n' + katexCss;
 
                 // Prepare environment for footnotes
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const env: any = {};
 
                 // Initialize MarkdownIt with per-item config
@@ -191,7 +194,7 @@ export class WeChatMarkdown implements INodeType {
                         if (lang && hljs.getLanguage(lang)) {
                             try {
                                 highlighted = hljs.highlight(str, { language: lang, ignoreIllegals: true }).value;
-                            } catch (__) {
+                            } catch {
                                 highlighted = md.utils.escapeHtml(str);
                             }
                         } else {
@@ -216,8 +219,7 @@ export class WeChatMarkdown implements INodeType {
                 });
 
                 // Use KaTeX
-                // eslint-disable-next-line @typescript-eslint/no-var-requires
-                md.use(require('markdown-it-katex'));
+                md.use(markdownItKatex);
 
                 // Add Footnotes support
                 addFootnotes(md);
