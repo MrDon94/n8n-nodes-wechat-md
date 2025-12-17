@@ -1,46 +1,53 @@
 # n8n-nodes-wechat-md
 
-This is an n8n community node. It lets you use _app/service name_ in your n8n workflows.
+This is an n8n community node that allows you to convert Markdown to WeChat Official Account compatible HTML. It includes features like syntax highlighting, math formula support, and customizable themes.
 
-_App/service name_ is _one or two sentences describing the service this node integrates with_.
-
-[n8n](https://n8n.io/) is a [fair-code licensed](https://docs.n8n.io/sustainable-use-license/) workflow automation platform.
-
-[Installation](#installation)
-[Operations](#operations)
-[Credentials](#credentials)
-[Compatibility](#compatibility)
-[Usage](#usage)
-[Resources](#resources)
-[Version history](#version-history)
+[n8n](https://n8n.io/) is a fair-code licensed workflow automation platform.
 
 ## Installation
 
-Follow the [installation guide](https://docs.n8n.io/integrations/community-nodes/installation/) in the n8n community nodes documentation.
+Follow the [installation guide](https://docs.n8n.io/integrations/community-nodes/installation/) in the n8n documentation.
 
-## Operations
-
-_List the operations supported by your node._
-
-## Credentials
-
-_If users need to authenticate with the app/service, provide details here. You should include prerequisites (such as signing up with the service), available authentication methods, and how to set them up._
-
-## Compatibility
-
-_State the minimum n8n version, as well as which versions you test against. You can also include any known version incompatibility issues._
+1.  Go to **Settings > Community Nodes**.
+2.  Select **Install**.
+3.  Enter `n8n-nodes-wechat-md` in the **npm Package Name** field.
+4.  Agree to the risks and select **Install**.
 
 ## Usage
 
-_This is an optional section. Use it to help users with any difficult or confusing aspects of the node._
+This node converts Markdown input into HTML with inline styles, ready to be pasted into the WeChat Official Account editor or pushed via API.
 
-_By the time users are looking for community nodes, they probably already know n8n basics. But if you expect new users, you can link to the [Try it out](https://docs.n8n.io/try-it-out/) documentation to help them get started._
+### Features
+*   **Markdown to HTML**: Standard Markdown support.
+*   **Syntax Highlighting**: Supports multiple languages with `highlight.js`.
+*   **Math Support**: Renders LaTeX formulas using `KaTeX`.
+*   **Themes**: Built-in themes (Default Green, Orange, Blue) and Custom CSS support.
+*   **WeChat Optimizations**:
+    *   Inline CSS styles (essential for WeChat).
+    *   Converts external links to footnotes (WeChat restriction).
+    *   Mac-style code block window controls.
 
-## Resources
+### Configuration
 
-* [n8n community nodes documentation](https://docs.n8n.io/integrations/#community-nodes)
-* _Link to app/service documentation._
+You can configure the output style using the **Configuration (JSON)** parameter.
 
-## Version history
+**Example Configuration:**
 
-_This is another optional section. If your node has multiple versions, include a short description of available versions and what changed, as well as any compatibility impact._
+```json
+{
+  "theme": "default",           // Options: "default", "orange", "blue", "custom"
+  "primaryColor": "#009874",    // Only used if theme is "custom"
+  "fontFamily": "sans-serif",
+  "fontSize": "16px",
+  "blockStyle": "mac",          // Options: "mac", "default"
+  "lineNumbers": true,          // Show line numbers in code blocks
+  "textAlign": "justify",       // Options: "left", "justify"
+  "textIndent": "2em",          // Paragraph indentation
+  "codeTheme": "github",        // Options: "github", "github-dark", "monokai", "dracula"
+  "footnotes": true             // Convert links to footnotes
+}
+```
+
+## License
+
+MIT
