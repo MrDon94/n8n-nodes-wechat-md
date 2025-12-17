@@ -32,7 +32,6 @@
         "strict": true,
         "credentials": [],
         "nodes": [
-            "dist/nodes/Example/Example.node.js",
             "dist/nodes/WeChatMarkdown/WeChatMarkdown.node.js"
         ]
     },
