@@ -214,7 +214,10 @@ export class WeChatMarkdown implements INodeType {
                 const theme = this.getNodeParameter('theme', i) as string;
                 const fontFamily = this.getNodeParameter('fontFamily', i) as string;
                 const fontSize = this.getNodeParameter('fontSize', i) as string;
-                const customColor = this.getNodeParameter('customColor', i) as string;
+                // customColor only exists when theme === 'custom', so get it conditionally with a fallback
+                const customColor = theme === 'custom'
+                    ? (this.getNodeParameter('customColor', i) as string)
+                    : '#000000';
                 const blockStyle = this.getNodeParameter('blockStyle', i) as 'default' | 'mac';
                 const lineNumbers = this.getNodeParameter('lineNumbers', i) as boolean;
                 const textAlign = this.getNodeParameter('textAlign', i) as 'left' | 'justify';
