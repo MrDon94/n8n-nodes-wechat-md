@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-wechat-md",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "n8n node to convert Markdown to WeChat Official Account compatible HTML with syntax highlighting and themes.",
   "license": "MIT",
   "homepage": "",
