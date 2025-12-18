@@ -29,24 +29,31 @@ This node converts Markdown input into HTML with inline styles, ready to be past
 
 ### Configuration
 
-You can configure the output style using the **Configuration (JSON)** parameter.
+The node provides individual configuration options in the UI:
 
-**Example Configuration:**
+| Option | Description | Default |
+| --- | --- | --- |
+| **Theme** | Color theme: Default (Green), Orange, Blue, or Custom | `default` |
+| **Font Family** | Font family for the content | System fonts |
+| **Font Size** | Font size (e.g., `16px`, `1em`) | `16px` |
+| **Custom Color** | Primary color (only when Theme is Custom) | `#000000` |
+| **Block Style** | Code block style: Default or Mac (with window controls) | `default` |
+| **Line Numbers** | Show line numbers in code blocks | `false` |
+| **Text Align** | Text alignment: Left or Justify | `left` |
+| **Text Indent** | Paragraph indentation (e.g., `2em`) | `0em` |
+| **Code Theme** | Syntax highlighting theme: GitHub, GitHub Dark, Monokai, Dracula | `github-dark` |
+| **Footnotes** | Convert external links to footnotes | `false` |
+| **Custom CSS** | Additional CSS (only when Theme is Custom) | - |
 
-```json
-{
-  "theme": "default",           // Options: "default", "orange", "blue", "custom"
-  "primaryColor": "#009874",    // Only used if theme is "custom"
-  "fontFamily": "sans-serif",
-  "fontSize": "16px",
-  "blockStyle": "mac",          // Options: "mac", "default"
-  "lineNumbers": true,          // Show line numbers in code blocks
-  "textAlign": "justify",       // Options: "left", "justify"
-  "textIndent": "2em",          // Paragraph indentation
-  "codeTheme": "github",        // Options: "github", "github-dark", "monokai", "dracula"
-  "footnotes": true             // Convert links to footnotes
-}
+### Development
+
+Run the test script to generate sample output:
+
+```bash
+npx ts-node --transpile-only test-run.ts
 ```
+
+This reads `test.md` and generates `test.html` in the project root.
 
 ## License
 
