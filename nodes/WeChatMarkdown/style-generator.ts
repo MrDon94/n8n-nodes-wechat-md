@@ -173,6 +173,7 @@ export class StyleGenerator {
                 -webkit-overflow-scrolling: touch;
                 line-height: 1.5;
                 position: relative;
+                background-color: ${themeBg};
             }
             
             code {
@@ -218,17 +219,23 @@ export class StyleGenerator {
 
         // Line Numbers Styles
         if (this.config.lineNumbers) {
+            const isLight = this.isLightTheme(theme);
+            const borderColor = isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)';
+            const textColor = isLight ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.3)';
+
             css += `
                 .code-with-line-numbers {
                     display: flex;
                     overflow: hidden;
+                    background-color: ${themeBg};
+                    border-radius: 4px;
                 }
                 
                 .code-line-numbers {
                     text-align: right;
                     padding: 1em 0.5em 1em 1em;
-                    border-right: 1px solid rgba(0,0,0,0.1);
-                    color: rgba(0,0,0,0.3);
+                    border-right: 1px solid ${borderColor};
+                    color: ${textColor};
                     user-select: none;
                     font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
                     font-size: 14px;
@@ -251,16 +258,10 @@ export class StyleGenerator {
 
             // Adjust Mac style if line numbers are present
             if (style === 'mac') {
-                const isLight = this.isLightTheme(theme);
-                const borderColor = isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)';
-                const textColor = isLight ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.3)';
-
                 css += `
                     .code-with-line-numbers {
                         padding-top: 2.5em;
                         position: relative;
-                        background-color: ${themeBg};
-                        border-radius: 4px;
                     }
                     
                     .code-with-line-numbers::before {
@@ -274,11 +275,6 @@ export class StyleGenerator {
                         border-radius: 50%;
                         box-shadow: 20px 0 #fdbc40, 40px 0 #35cd4b;
                         z-index: 10;
-                    }
-                    
-                    .code-line-numbers {
-                        border-right: 1px solid ${borderColor};
-                        color: ${textColor};
                     }
                 `;
             }

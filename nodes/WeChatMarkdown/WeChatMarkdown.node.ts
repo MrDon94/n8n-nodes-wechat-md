@@ -41,14 +41,112 @@ export class WeChatMarkdown implements INodeType {
                 },
             },
             {
-                displayName: 'Configuration (JSON)',
-                name: 'configJson',
-                type: 'json',
-                default: '{}',
-                description: 'Advanced configuration in JSON format. Overrides other settings.',
-                typeOptions: {
-                    rows: 5,
+                displayName: 'Font Family',
+                name: 'fontFamily',
+                type: 'string',
+                default: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                description: 'The font family to use',
+            },
+            {
+                displayName: 'Font Size',
+                name: 'fontSize',
+                type: 'string',
+                default: '16px',
+                description: 'The font size (e.g. 16px, 1em)',
+            },
+            {
+                displayName: 'Custom Color',
+                name: 'customColor',
+                type: 'color',
+                default: '#000000',
+                description: 'Custom primary color',
+                displayOptions: {
+                    show: {
+                        theme: [
+                            'custom',
+                        ],
+                    },
                 },
+            },
+            {
+                displayName: 'Block Style',
+                name: 'blockStyle',
+                type: 'options',
+                options: [
+                    {
+                        name: 'Default',
+                        value: 'default',
+                    },
+                    {
+                        name: 'Mac',
+                        value: 'mac',
+                    },
+                ],
+                default: 'default',
+                description: 'The style of code blocks',
+            },
+            {
+                displayName: 'Line Numbers',
+                name: 'lineNumbers',
+                type: 'boolean',
+                default: false,
+                description: 'Whether to show line numbers in code blocks',
+            },
+            {
+                displayName: 'Text Align',
+                name: 'textAlign',
+                type: 'options',
+                options: [
+                    {
+                        name: 'Left',
+                        value: 'left',
+                    },
+                    {
+                        name: 'Justify',
+                        value: 'justify',
+                    },
+                ],
+                default: 'left',
+                description: 'Text alignment',
+            },
+            {
+                displayName: 'Text Indent',
+                name: 'textIndent',
+                type: 'string',
+                default: '0em',
+                description: 'Text indentation (e.g. 2em)',
+            },
+            {
+                displayName: 'Code Theme',
+                name: 'codeTheme',
+                type: 'options',
+                options: [
+                    {
+                        name: 'GitHub',
+                        value: 'github',
+                    },
+                    {
+                        name: 'GitHub Dark',
+                        value: 'github-dark',
+                    },
+                    {
+                        name: 'Monokai',
+                        value: 'monokai',
+                    },
+                    {
+                        name: 'Dracula',
+                        value: 'dracula',
+                    },
+                ],
+                default: 'github-dark',
+                description: 'The theme for code syntax highlighting',
+            },
+            {
+                displayName: 'Footnotes',
+                name: 'footnotes',
+                type: 'boolean',
+                default: false,
+                description: 'Whether to enable footnotes support',
             },
             {
                 displayName: 'Theme',
@@ -97,24 +195,7 @@ export class WeChatMarkdown implements INodeType {
         const items = this.getInputData();
         const returnData: INodeExecutionData[] = [];
 
-        // Load themes (Legacy support)
-        const themes: { [key: string]: string } = {};
-        const themeFiles = {
-            'default': 'default-theme.css',
-            'orange': 'orange-theme.css',
-            'blue': 'blue-theme.css',
-        };
 
-        for (const [key, filename] of Object.entries(themeFiles)) {
-            try {
-                const themePath = path.join(__dirname, filename);
-                if (fs.existsSync(themePath)) {
-                    themes[key] = fs.readFileSync(themePath, 'utf8');
-                }
-            } catch {
-                // console.error(`Failed to load theme ${key}:`, error);
-            }
-        }
 
         // Load KaTeX CSS
         const katexThemePath = path.join(__dirname, 'katex.css');
@@ -131,49 +212,81 @@ export class WeChatMarkdown implements INodeType {
             try {
                 const markdownContent = this.getNodeParameter('markdownContent', i) as string;
                 const theme = this.getNodeParameter('theme', i) as string;
-                let configJsonStr = '{}';
-                try {
-                    configJsonStr = this.getNodeParameter('configJson', i) as string;
-                } catch {
-                    // Ignore if not present or invalid
-                }
+                const fontFamily = this.getNodeParameter('fontFamily', i) as string;
+                const fontSize = this.getNodeParameter('fontSize', i) as string;
+                const customColor = this.getNodeParameter('customColor', i) as string;
+                const blockStyle = this.getNodeParameter('blockStyle', i) as 'default' | 'mac';
+                const lineNumbers = this.getNodeParameter('lineNumbers', i) as boolean;
+                const textAlign = this.getNodeParameter('textAlign', i) as 'left' | 'justify';
+                const textIndent = this.getNodeParameter('textIndent', i) as string;
+                const codeTheme = this.getNodeParameter('codeTheme', i) as 'github' | 'github-dark' | 'monokai' | 'dracula';
+                const footnotes = this.getNodeParameter('footnotes', i) as boolean;
 
-                let config: IWeChatMarkdownConfig = {};
-                try {
-                    config = JSON.parse(configJsonStr);
-                } catch {
-                    // console.warn('Invalid JSON config', e);
-                }
+                const config: IWeChatMarkdownConfig = {
+                    theme: theme as any,
+                    fontFamily,
+                    fontSize,
+                    customColor,
+                    blockStyle,
+                    lineNumbers,
+                    textAlign,
+                    textIndent,
+                    codeTheme,
+                    footnotes,
+                };
 
                 let css = '';
 
-                // If config is provided, use StyleGenerator
-                if (Object.keys(config).length > 0) {
-                    const generator = new StyleGenerator(config);
-                    css = generator.generateCss();
+                // Use StyleGenerator
+                const generator = new StyleGenerator(config);
+                css = generator.generateCss();
 
-                    // Load Highlight.js CSS
-                    const codeTheme = config.codeTheme || 'github';
-                    const hljsThemePath = path.join(__dirname, '../../node_modules/highlight.js/styles', `${codeTheme}.css`);
-                    try {
-                        if (fs.existsSync(hljsThemePath)) {
-                            css += '\n' + fs.readFileSync(hljsThemePath, 'utf8');
-                        } else {
-                            // Fallback to github.css if theme not found
-                            const fallbackPath = path.join(__dirname, '../../node_modules/highlight.js/styles/github.css');
-                            if (fs.existsSync(fallbackPath)) {
-                                css += '\n' + fs.readFileSync(fallbackPath, 'utf8');
+                // Load Highlight.js CSS
+                // Map code theme to actual file paths
+                const getHljsThemePath = (theme: string): string => {
+                    const stylesDir = path.join(__dirname, '../../node_modules/highlight.js/styles');
+                    switch (theme) {
+                        case 'dracula':
+                            return path.join(stylesDir, 'base16/dracula.css');
+                        case 'monokai':
+                            // Try monokai first, fallback to monokai-sublime
+                            const monokaiPath = path.join(stylesDir, 'monokai.css');
+                            if (fs.existsSync(monokaiPath)) {
+                                return monokaiPath;
                             }
+                            return path.join(stylesDir, 'monokai-sublime.css');
+                        case 'github-dark':
+                            return path.join(stylesDir, 'github-dark.css');
+                        case 'github':
+                        default:
+                            return path.join(stylesDir, 'github.css');
+                    }
+                };
+
+                const hljsThemePath = getHljsThemePath(config.codeTheme || 'github');
+                try {
+                    if (fs.existsSync(hljsThemePath)) {
+                        css += '\n' + fs.readFileSync(hljsThemePath, 'utf8');
+                    } else {
+                        // Fallback to github.css if theme not found
+                        const fallbackPath = path.join(__dirname, '../../node_modules/highlight.js/styles/github.css');
+                        if (fs.existsSync(fallbackPath)) {
+                            css += '\n' + fs.readFileSync(fallbackPath, 'utf8');
+                        }
+                    }
+                } catch {
+                    // console.warn('Failed to load highlight.js theme', e);
+                }
+
+                // Append Custom CSS if applicable
+                if (theme === 'custom') {
+                    try {
+                        const customCss = this.getNodeParameter('customCss', i) as string;
+                        if (customCss) {
+                            css += '\n' + customCss;
                         }
                     } catch {
-                        // console.warn('Failed to load highlight.js theme', e);
-                    }
-                } else {
-                    // Fallback to legacy theme logic
-                    if (theme === 'custom') {
-                        css = this.getNodeParameter('customCss', i) as string;
-                    } else {
-                        css = themes[theme] || themes['default'] || '';
+                        // Ignore
                     }
                 }
 
