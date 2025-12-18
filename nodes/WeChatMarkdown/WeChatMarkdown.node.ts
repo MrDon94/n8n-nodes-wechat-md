@@ -226,7 +226,7 @@ export class WeChatMarkdown implements INodeType {
                 const footnotes = this.getNodeParameter('footnotes', i) as boolean;
 
                 const config: IWeChatMarkdownConfig = {
-                    theme: theme as any,
+                    theme: theme as 'default' | 'orange' | 'blue' | 'custom',
                     fontFamily,
                     fontSize,
                     customColor,
@@ -246,24 +246,22 @@ export class WeChatMarkdown implements INodeType {
 
                 // Load Highlight.js CSS
                 // Map code theme to actual file paths
-                const getHljsThemePath = (theme: string): string => {
+                const getHljsThemePath = (themeValue: string): string => {
                     const stylesDir = path.join(__dirname, '../../node_modules/highlight.js/styles');
-                    switch (theme) {
-                        case 'dracula':
-                            return path.join(stylesDir, 'base16/dracula.css');
-                        case 'monokai':
-                            // Try monokai first, fallback to monokai-sublime
-                            const monokaiPath = path.join(stylesDir, 'monokai.css');
-                            if (fs.existsSync(monokaiPath)) {
-                                return monokaiPath;
-                            }
-                            return path.join(stylesDir, 'monokai-sublime.css');
-                        case 'github-dark':
-                            return path.join(stylesDir, 'github-dark.css');
-                        case 'github':
-                        default:
-                            return path.join(stylesDir, 'github.css');
+                    if (themeValue === 'dracula') {
+                        return path.join(stylesDir, 'base16/dracula.css');
                     }
+                    if (themeValue === 'monokai') {
+                        const monokaiPath = path.join(stylesDir, 'monokai.css');
+                        if (fs.existsSync(monokaiPath)) {
+                            return monokaiPath;
+                        }
+                        return path.join(stylesDir, 'monokai-sublime.css');
+                    }
+                    if (themeValue === 'github-dark') {
+                        return path.join(stylesDir, 'github-dark.css');
+                    }
+                    return path.join(stylesDir, 'github.css');
                 };
 
                 const hljsThemePath = getHljsThemePath(config.codeTheme || 'github');

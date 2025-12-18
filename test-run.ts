@@ -1,13 +1,14 @@
 import { WeChatMarkdown } from './nodes/WeChatMarkdown/WeChatMarkdown.node';
-import { IExecuteFunctions, INodeExecutionData } from 'n8n-workflow';
+import { IExecuteFunctions } from 'n8n-workflow';
 import * as fs from 'fs';
 import * as path from 'path';
 
 // Mock IExecuteFunctions
 const mockExecuteFunctions = {
     getInputData: () => [{ json: {} }],
-    getNodeParameter: (name: string, index: number) => {
-        const params: { [key: string]: any } = {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    getNodeParameter: (name: string, _index: number) => {
+        const params: Record<string, string | boolean> = {
             markdownContent: fs.readFileSync(path.join(__dirname, 'test.md'), 'utf8'),
             theme: 'default',// 'default', 'orange', 'blue', 'custom'
             fontFamily: 'sans-serif',
@@ -31,8 +32,10 @@ async function run() {
         const result = await node.execute.call(mockExecuteFunctions);
         const html = result[0][0].json.html as string;
         fs.writeFileSync(path.join(__dirname, 'test.html'), html);
+        // eslint-disable-next-line no-console
         console.log('Successfully generated test.html');
     } catch (error) {
+        // eslint-disable-next-line no-console
         console.error('Error executing node:', error);
     }
 }
